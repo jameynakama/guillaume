@@ -7,9 +7,9 @@ Gem::Specification.new do |spec|
   spec.name          = "guillaume"
   spec.version       = Guillaume::VERSION
   spec.authors       = ["Jamey J. DeOrio"]
-  spec.email         = ["jameyd@darkhorse.com"]
+  spec.email         = ["jdeorio@gmail.com"]
   spec.description   = %q{TODO: Write a gem description}
-  spec.summary       = %q{TODO: Write a gem summary}
+  spec.summary       = "A generative poetry creation tool"
   spec.homepage      = ""
   spec.license       = "MIT"
 

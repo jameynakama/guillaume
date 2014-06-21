@@ -1,6 +1,6 @@
 # Guillaume
 
-TODO: Write a gem description
+Guillaume is a generative poetry creation tool.
 
 ## Installation
 

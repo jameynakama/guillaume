@@ -1,13 +1,14 @@
 class Guillaume::Ngram
-  attr_accessor :options
-
-  def initialize(source, options = { regex: / / })
+  def initialize(source)
     @source = source
-    @options = options
   end
 
   def ngrams(n)
-    @source.split(@options[:regex]).each_cons(n).to_a
+    result = []
+    sentences.each do |sentence|
+      result += sentence.split(" ").each_cons(n).to_a
+    end
+    result
   end
 
   def unigrams
@@ -20,5 +21,11 @@ class Guillaume::Ngram
 
   def trigrams
     ngrams 3
+  end
+
+  def sentences
+    @sentences ||= @source.split(/(?<=\.[ \r\n]|\?[ \r\n]|![ \r\n])/).map do |sentence|
+      sentence.gsub(/[\r\n]+/, " ").strip
+    end.reject(&:empty?)
   end
 end

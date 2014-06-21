@@ -1,6 +1,7 @@
 describe Guillaume::Ngram do
   subject do
-    Guillaume::Ngram.new("A la fin tu es las de ce monde ancien")
+    text_source = Guillaume::TextSource.new("\r\nA la \r\nfin tu es las de ce monde ancien")
+    Guillaume::Ngram.new(text_source.plaintext)
   end
 
   it "has unigrams" do

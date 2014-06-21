@@ -25,7 +25,7 @@ class Guillaume::Ngram
 
   def sentences
     @sentences ||= @source.split(/(?<=\.[ \r\n]|\?[ \r\n]|![ \r\n])/).map do |sentence|
-      sentence.gsub(/[\r\n]+/, " ").strip
+      sentence.gsub(/[\r\n ]+/, " ").strip
     end.reject(&:empty?)
   end
 end

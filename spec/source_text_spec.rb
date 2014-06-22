@@ -5,6 +5,10 @@ describe Guillaume::SourceText do
     Guillaume::SourceText.new(file_path)
   end
 
+  it "can normalize the input file" do
+    expect(subject.normalized).to eq("A la fin tu es las de ce monde ancien")
+  end
+
   it "has unigrams" do
     expect(subject.unigrams).to eq([%w(A), %w(la), %w(fin), %w(tu), %w(es), %w(las), %w(de), %w(ce), %w(monde), %w(ancien)])
   end

@@ -7,7 +7,7 @@ class Guillaume::SourceText
   end
 
   def normalized
-    @raw_source.gsub(/[\r\n ]+/, " ")
+    @raw_source.gsub(/[\r\n ]+/, " ").strip
   end
 
   def ngrams(n)

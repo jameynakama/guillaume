@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.version       = Guillaume::VERSION
   spec.authors       = ["Jamey J. DeOrio"]
   spec.email         = ["jdeorio@gmail.com"]
-  spec.description   = %q{TODO: Write a gem description}
+  spec.description   = %q{Guillaume is a generative poetry creation tool using ngrams for predictive writing and a defined poetics for guiding its creation.}
   spec.summary       = "A generative poetry creation tool"
   spec.homepage      = ""
   spec.license       = "MIT"

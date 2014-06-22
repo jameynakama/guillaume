@@ -19,14 +19,14 @@ class Guillaume::SourceText
   end
 
   def unigrams
-    ngrams 1
+    @unigrams ||= ngrams 1
   end
 
   def bigrams
-    ngrams 2
+    @bigrams ||= ngrams 2
   end
 
   def trigrams
-    ngrams 3
+    @trigrams ||= ngrams 3
   end
 end

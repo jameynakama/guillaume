@@ -18,13 +18,14 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+    $ ruby -Ilib bin/guillaume
 
 ## TODO
 
 - establish a key/value store for ngrams
-- write parsing methods for poetry (linebreak-aware) and literature (linebreak-agnostic)
+- write separate parsing methods for poetry (linebreak-aware) and literature (linebreak-agnostic)
 - establish a poetics to guide guillaume on "writing"
+- make an executable
 
 ## Contributing
 

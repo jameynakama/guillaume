@@ -1,0 +1,13 @@
+#!/usr/bin/env ruby
+
+require 'guillaume'
+
+#source_text = Guillaume::SourceText.new("data/moby_dick.txt")
+source_text = Guillaume::SourceText.new("data/call_of_the_wild.txt")
+
+10.times do |i|
+  seed = source_text.unigrams.select { |word| word.first[0] =~ /[A-Z]/ }.sample.first
+  line = Guillaume::Line.new(seed)
+  finished = line.build(source_text.bigrams)
+  puts "#{i + 1}: #{finished}"
+end

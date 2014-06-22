@@ -1,7 +1,8 @@
-describe Guillaume::Ngram do
+describe Guillaume::SourceText do
+  let(:file_path) { "spec/data/zone.txt" }
+
   subject do
-    text_source = Guillaume::TextSource.new("\r\nA la \r\nfin tu es las de ce monde ancien")
-    Guillaume::Ngram.new(text_source.plaintext)
+    Guillaume::SourceText.new(file_path)
   end
 
   it "has unigrams" do

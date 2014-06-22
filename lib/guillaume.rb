@@ -1,8 +1,7 @@
 require "net/http"
 require "guillaume/version"
-require "guillaume/base"
-require "guillaume/text_source"
-require "guillaume/ngram"
+require "guillaume/source_text"
+require "guillaume/line"
 
 module Guillaume
 end

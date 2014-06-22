@@ -4,6 +4,8 @@ Guillaume is a generative poetry creation tool.
 
 ## Installation
 
+**\\\\\\ This is not a gem yet! The below is boilerplate. ///**
+
 Add this line to your application's Gemfile:
 
     gem 'guillaume'

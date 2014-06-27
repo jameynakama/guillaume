@@ -1,5 +1,1 @@
-adapter: postgresql
-database: dev-guillaume
-pool: 5
-username: root
-password:
+connection_string: "sqlite://development.db"

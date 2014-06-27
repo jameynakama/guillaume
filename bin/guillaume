@@ -1,21 +1,10 @@
 #!/usr/bin/env ruby
 
 require "guillaume"
-require "ohm"
-require "json"
 
-#source_text = Guillaume::SourceText.new("data/moby_dick.txt")
-source_text = Guillaume::SourceText.new("data/call_of_the_wild.txt")
+source = ARGV[0]
 
-#corporus = Guillaume::Corporus.create(name: "Call of the Wild")
-#source_text.unigrams.each do |u|
-  #ngram = Guillaume::Ngram.create(ngram: u.to_s)
-  #corporus.unigrams << ngram
-#end
+source_text = Guillaume::SourceText.new(source)
 
-10.times do
-  seed = source_text.unigrams.select { |word| word.first[0] =~ /[A-Z]/ }.sample.first
-  line = Guillaume::Line.new(seed)
-  finished = line.build(source_text.bigrams)
-  puts finished
-end
+poem = Guillaume::Poem.new(source_text)
+puts poem.formatted

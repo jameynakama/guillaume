@@ -4,6 +4,7 @@
 .config
 .yardoc
 Gemfile.lock
+.ruby-version
 InstalledFiles
 _yardoc
 coverage
@@ -15,6 +16,6 @@ spec/reports
 test/tmp
 test/version_tmp
 tmp
+
 tags
 *.swp
-database.yaml

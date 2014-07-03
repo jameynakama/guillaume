@@ -1,13 +1,20 @@
 class Guillaume::Poem
-  attr_accessor :corpora, :lines, :poem
+  attr_accessor :corpora, :poem
 
   def initialize(corpora, options = { seed: nil, max_stanzas: 10 })
     @corpora = corpora
     @first_seed = options[:seed].nil? ? random_seed(@corpora.unigrams) : options[:seed]
     @max_stanzas = options[:max_stanzas]
-    @lines = 0
     @stanzas = 0
     @poem = write
+  end
+
+  def get_seed(lines)
+    if @stanzas == 0 && lines.empty?
+      @first_seed
+    else
+      random_seed @corpora.unigrams
+    end
   end
 
   def random_seed(ngrams)
@@ -27,18 +34,22 @@ class Guillaume::Poem
 
   #
   # TODO: which_gram
-  # TODO: thesaurus stuff for topic staying/straying
   # TODO: explicit num_lines option
   #
   def stanza(lines_memo = [])
-    #which_gram = :bigrams
-
-    if rand(100) <= lines_memo.count * 10 # never more than 10 lines this way
+    if rand(10) <= lines_memo.count # never more than 10 lines this way
       return lines_memo << ""
     else
-      line = Guillaume::Line.new(random_seed(@corpora.unigrams)).build(@corpora.bigrams)
+      # TODO: move this to poetics
+      ngrams = WeightedRandomizer.new({
+        @corpora.bigrams => 10,
+        @corpora.trigrams => 3,
+        @corpora.ngrams(4) => 1
+      })
+      $LOGGER.debug("  Writing line #{lines_memo.count + 1}...")
+      line = Guillaume::Line.new(get_seed lines_memo).build(ngrams)
       if line.length > 80
-        line = Guillaume::Poetics.enjamb 40, line # 40% chance to break a long line
+        line = Guillaume::Poetics.enjamb line, 40 # 40% chance to break a long line
       end
       lines_memo << line
       stanza(lines_memo)

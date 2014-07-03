@@ -11,6 +11,15 @@ option_parser = OptionParser.new do |opts|
     $LOGGER.level = Logger::INFO
   end
 
+  opts.on("-d", "--debug", "Debug (extra verbose) output while writing") do
+    $LOGGER.level = Logger::DEBUG
+  end
+
+  options[:seed] = nil
+  opts.on("-s", "--seed SEED", String, "Seed to start poem") do |s|
+    options[:seed] = s
+  end
+
   options[:max_stanzas] = 10
   opts.on("-m", "--max-stanzas STANZAS", Integer, "Maximum number of stanzas to write") do |m|
     options[:max_stanzas] = m
@@ -33,6 +42,10 @@ end
 
 # validations
 
-poem = Guillaume::Poem.new(Guillaume::SourceText.new(source_text_file), max_stanzas: options[:max_stanzas])
+poem = Guillaume::Poem.new(
+  Guillaume::SourceText.new(source_text_file),
+  max_stanzas: options[:max_stanzas],
+  seed: options[:seed]
+)
 puts ""
 puts poem.formatted

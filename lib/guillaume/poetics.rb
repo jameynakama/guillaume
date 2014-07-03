@@ -1,5 +1,11 @@
+#
+# TODO: move when to enjamb in here
+# TODO: move weighted_randomizer here
+# TODO: sometimes start many lines with same word
+# TODO: topic staying/straying
+#
 class Guillaume::Poetics
-  def self.enjamb(chance=100, line)
+  def self.enjamb(line, chance = 100)
     if rand(100) <= chance
       line_parts = line.split(/(?<=[\.,;!-])/)
       if line_parts.count > 1 # if the line contains any . , ; ! -

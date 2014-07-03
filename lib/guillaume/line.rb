@@ -1,3 +1,5 @@
+require "weighted_randomizer"
+
 class Guillaume::Line
   def initialize(seed = nil)
     @line_parts = seed.split(/ /)
@@ -5,7 +7,9 @@ class Guillaume::Line
 
   def build(ngrams)
     begin
-      @line_parts << next_word(ngrams)
+      ngram = ngrams.sample
+      $LOGGER.debug("    Using #{ngram.first.count}-grams for next word...")
+      @line_parts << next_word(ngram)
     end until @line_parts.last.nil?
     @line_parts.join(" ").strip
   end

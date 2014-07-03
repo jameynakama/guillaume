@@ -1,10 +1,38 @@
 #!/usr/bin/env ruby
 
+require "optparse"
 require "guillaume"
 
-source = ARGV[0]
+options = {}
+option_parser = OptionParser.new do |opts|
+  opts.banner = "Usage: guillaume /path/to/text_source.txt"
 
-source_text = Guillaume::SourceText.new(source)
+  opts.on("-v", "--verbose", "Verbose output while writing") do
+    $LOGGER.level = Logger::INFO
+  end
 
-poem = Guillaume::Poem.new(source_text)
+  options[:max_stanzas] = 10
+  opts.on("-m", "--max-stanzas STANZAS", Integer, "Maximum number of stanzas to write") do |m|
+    options[:max_stanzas] = m
+  end
+end
+
+option_parser.parse!
+
+source_text_file = ARGV.pop
+
+if !source_text_file && options.empty?
+  puts option_parser.help
+  exit
+end
+
+# required
+unless source_text_file
+  raise ArgumentError, "Please point to a source text file"
+end
+
+# validations
+
+poem = Guillaume::Poem.new(Guillaume::SourceText.new(source_text_file), max_stanzas: options[:max_stanzas])
+puts ""
 puts poem.formatted

@@ -1,9 +1,12 @@
 class Guillaume::Poem
   attr_accessor :corpora, :lines, :poem
 
-  def initialize(corpora, seed = nil)
+  def initialize(corpora, options = { seed: nil, max_stanzas: 10 })
     @corpora = corpora
-    @first_seed = seed.nil? ? random_seed(@corpora.unigrams) : seed
+    @first_seed = options[:seed].nil? ? random_seed(@corpora.unigrams) : options[:seed]
+    @max_stanzas = options[:max_stanzas]
+    @lines = 0
+    @stanzas = 0
     @poem = write
   end
 
@@ -12,10 +15,12 @@ class Guillaume::Poem
   end
 
   def write(lines_memo = [])
-    if rand(100) <= lines_memo.count # never more than 100 lines this way
+    if rand(@max_stanzas) < @stanzas
       return lines_memo
     else
+      $LOGGER.info("Writing stanza #{@stanzas + 1}...")
       lines_memo += stanza
+      @stanzas += 1
       write(lines_memo)
     end
   end

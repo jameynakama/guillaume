@@ -5,7 +5,7 @@ require "guillaume"
 
 options = {}
 option_parser = OptionParser.new do |opts|
-  opts.banner = "Usage: guillaume /path/to/text_source.txt"
+  opts.banner = "Usage: guillaume /path/to/text_source.txt [options]"
 
   opts.on("-v", "--verbose", "Verbose output while writing") do
     $LOGGER.level = Logger::INFO

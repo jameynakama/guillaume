@@ -7,7 +7,7 @@ class Guillaume::Line
     begin
       @line_parts << next_word(ngrams)
     end until @line_parts.last.nil?
-    @line_parts.join(" ")
+    @line_parts.join(" ").strip
   end
 
   def next_word(ngrams, options = { look_behind: 1 })

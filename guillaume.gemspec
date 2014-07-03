@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["jdeorio@gmail.com"]
   spec.description   = %q{Guillaume is a generative poetry creation tool using ngrams for predictive writing and a defined poetics for guiding its creation.}
   spec.summary       = "A generative poetry creation tool"
-  spec.homepage      = ""
+  spec.homepage      = "http://rubygems.org/gems/guillaume"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0")
@@ -19,5 +19,5 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_development_dependency "bundler", "~> 1.3"
-  spec.add_development_dependency "rake"
+  spec.add_development_dependency "rake", "~> 0"
 end

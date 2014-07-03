@@ -4,11 +4,9 @@ Guillaume is a generative poetry creation tool.
 
 ## Installation
 
-**\\\\\\ This is not a gem yet! The below is boilerplate. ///**
-
 Add this line to your application's Gemfile:
 
-    gem 'guillaume'
+    gem "guillaume"
 
 And then execute:
 
@@ -20,14 +18,24 @@ Or install it yourself as:
 
 ## Usage
 
-    $ ruby -Ilib bin/guillaume
+### Command line
+
+    Usage: guillaume /path/to/text_source.txt
+        -v, --verbose                    Verbose output while writing
+        -m, --max-stanzas STANZAS        Maximum number of stanzas to write
+
+### Gem
+
+    require "guillaume"
+    source_text_file = Guillaume::SourceText.new("/path/to/text_source.txt")
+    poem = Guillaume::Poem.new(source_text_file, max_stanzas: 5)
+    puts poem.formatted
 
 ## TODO
 
-- establish a key/value store for ngrams
+- establish data storage
 - write separate parsing methods for poetry (linebreak-aware) and literature (linebreak-agnostic)
-- establish a poetics to guide guillaume on "writing"
-- make an executable
+- write functionality for staying/straying from topics
 
 ## Contributing
 

@@ -31,4 +31,8 @@ class Guillaume::SourceText
   def trigrams
     @trigrams ||= ngrams 3
   end
+
+  def tetragrams
+    @tetragrams ||= ngrams 4
+  end
 end

@@ -44,7 +44,7 @@ class Guillaume::Poem
       ngrams = WeightedRandomizer.new({
         @corpora.bigrams => 10,
         @corpora.trigrams => 3,
-        @corpora.ngrams(4) => 1
+        @corpora.tetragrams => 1
       })
       $LOGGER.debug("  Writing line #{lines_memo.count + 1}...")
       line = Guillaume::Line.new(get_seed lines_memo).build(ngrams)

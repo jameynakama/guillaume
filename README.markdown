@@ -20,8 +20,10 @@ Or install it yourself as:
 
 ### Command line
 
-    Usage: guillaume /path/to/text_source.txt
+    Usage: guillaume /path/to/text_source.txt [options]
         -v, --verbose                    Verbose output while writing
+        -d, --debug                      Debug (extra verbose) output while writing
+        -s, --seed SEED                  Seed to start poem
         -m, --max-stanzas STANZAS        Maximum number of stanzas to write
 
 ### Gem

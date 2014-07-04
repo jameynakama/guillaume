@@ -35,9 +35,12 @@ Or install it yourself as:
 
 ## TODO
 
+- start and split lines in mid-sentence (sometimes)
 - establish data storage
 - write separate parsing methods for poetry (linebreak-aware) and literature (linebreak-agnostic)
-- write functionality for staying/straying from topics
+- write functionality for staying/straying from topics (seeds, thesaurus)
+- move a bunch of stuff into Guillaum::Poetics
+- make Guillaum::Poetics modular so others can plug in their own poetry engines
 
 ## Contributing
 

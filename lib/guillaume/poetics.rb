@@ -13,7 +13,8 @@ class Guillaume::Poetics
         line_parts[random_index] = line_parts[random_index] + "\n"
         line_parts.join.strip
       end
+    else
+      line
     end
-    line
   end
 end

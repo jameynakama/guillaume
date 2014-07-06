@@ -35,12 +35,13 @@ class Guillaume::Poem
   #
   # TODO: which_gram
   # TODO: explicit num_lines option
+  # FIXME: sometimes this returns an empty list
   #
   def stanza(lines_memo = [])
     if rand(10) <= lines_memo.count # never more than 10 lines this way
       return lines_memo << ""
     else
-      # TODO: move this to poetics
+      # TODO: move this to poetics and see if it's better line by line (only rarely mid-line)
       ngrams = WeightedRandomizer.new({
         @corpora.bigrams => 10,
         @corpora.trigrams => 3,

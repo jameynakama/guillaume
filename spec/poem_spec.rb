@@ -8,20 +8,20 @@ describe Guillaume::Poem do
   context "write method" do
     it "should write a poem" do
       poem = Guillaume::Poem.new(source_text)
-      expect(poem.formatted).to eq("He sure they were unarmed.\nFarquhar was being on the racing madly his back, it Owl Creek bridge, \ncaptain, saluted and he think of noose about thirty-five of an hand resting forearm straight on the back the bridge, put it comes to be shot.\n")
+      expect(poem.formatted).to eq("He sure were spectators--a company the formed straight on side \nside full of stream, the had him.\nExcepting group four the of death\n")
     end
   end
 
   it "should use a seed" do
     poem = Guillaume::Poem.new(source_text, seed: "They")
-    expect(poem.formatted).to eq("They it with the stream, the had come.\nDoubtless was swimming reach the bound a the forests, the Owl Creek bridge, \na great of the command at with quick, downward through the thought the roadway his subordinates, but did resemble.\n")
+    expect(poem.formatted[0..3]).to eq("They")
   end
 
   context "stanza method" do
     it "should write a single stanza" do
       stanza = Guillaume::Poem.new(source_text).stanza
       expect(stanza).to eq(
-        ["Ambrose Bierce man and until retaken.", "Farquhar dead; with her bowed to it warm and the sun, the his neck.", "Creek bridge, captain, saluted and wrenched an officer in growing light.", "This plank upon his own the shoulder, the privates, executioners.", ""]
+        ["No; I cannot dodge them all!\" An appalling splash within two men to side in a sound like tinder.\" The intervals of the \nhands crossed upon which had not be the work of that is darkness and something uncanny in his fingers into their branches in the Owl Creek bridge, staring stonily, motionless.", "The man's brain was a few moments he was \na civilian, if consistent with his own home.", "The liberal military code makes provision for the men--with what he replied.", "They his in morning's", ""]
       )
     end
   end

@@ -40,13 +40,13 @@ class Guillaume::Poem
     if rand(1..10) <= lines_memo.count # never more than 10 lines this way
       return lines_memo << ""
     else
-      # TODO: move this to poetics and see if it's better line by line (only rarely mid-line)
+      # TODO: move this to poetics (and do mid-line rarely)
       ngrams = WeightedRandomizer.new({
         @corpora.bigrams => 10,
         @corpora.trigrams => 3,
         @corpora.tetragrams => 1
-      })
-      $LOGGER.debug("  Writing line #{lines_memo.count + 1}...")
+      }).sample
+      $LOGGER.debug("  Writing line #{lines_memo.count + 1} with #{ngrams.first.count}-grams...")
       line = Guillaume::Line.new(get_seed lines_memo).build(ngrams)
       if line.length > 80
         line = Guillaume::Poetics.enjamb line, 40 # 40% chance to break a long line

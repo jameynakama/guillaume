@@ -5,11 +5,9 @@ class Guillaume::Line
     @line_parts = seed.split(/ /)
   end
 
-  def build(possible_ngrams)
+  def build(ngrams)
     begin
-      ngram = possible_ngrams.sample
-      $LOGGER.debug("    Using #{ngram.first.count}-grams for next word...")
-      @line_parts << next_word(ngram)
+      @line_parts << next_word(ngrams)
     end until @line_parts.last.nil?
     @line_parts.join(" ").strip
   end

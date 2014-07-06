@@ -12,7 +12,7 @@ describe Guillaume::Line do
   end
 
   it "should build a new line" do
-    expect(line.build([bigrams])).to eq("The Double Dream of his goal was 15 Ashbery was welcomed with form appears.")
+    expect(line.build(bigrams)).to eq("The Double Dream of his goal was 15 Ashbery was welcomed with form appears.")
   end
 
   it "should find matches from ngrams" do

@@ -1,0 +1,9 @@
+development:
+  adapter:  postgresql
+  host: localhost
+  username: guillaume
+  password:
+  database: guillaume
+test:
+  adapter: sqlite3
+  database: db/test.sqlite3

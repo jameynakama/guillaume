@@ -18,6 +18,19 @@ Or install it yourself as:
 
 ## Usage
 
+Guillaume requires a database to work. In order to know what to connect to, you
+must place a .guillaume_dbs.yml file in your home directory. The
+config/.guillaume_dbs.yml.example file shows a generic setup for this. You must
+have a development and test environment, but what you do in there is up to you.
+
+Currently, guillaume cannot create a user or db by itself, so you'll have to do
+that once. The following example is for postgres:
+
+    $ createuser -EdP guillaume
+    $ createdb -U guillaume guillaume
+
+You must then run `$ guillaume init` once to run migrations.
+
 ### Command line
 
     Usage: guillaume /path/to/text_source.txt [options]
@@ -29,18 +42,18 @@ Or install it yourself as:
 ### Gem
 
     require "guillaume"
-    source_text_file = Guillaume::SourceText.new("/path/to/text_source.txt")
-    poem = Guillaume::Poem.new(source_text_file, max_stanzas: 5)
+    source_text = Guillaume::SourceText.new
+    source_text.file_name = "/path/to/text_source.txt"
+    source_text.title = "Whatever you want to call it"
+    source_text.save
+    source_text.record_ngrams
+    poem = Guillaume::Poem.new(source_text, max_stanzas: 5)
     puts poem.formatted
 
-## TODO
+## UPCOMING
 
-- start and split lines in mid-sentence (sometimes)
-- establish data storage
-- write separate parsing methods for poetry (linebreak-aware) and literature (linebreak-agnostic)
-- write functionality for staying/straying from topics (seeds, thesaurus)
-- move a bunch of stuff into Guillaum::Poetics
-- make Guillaum::Poetics modular so others can plug in their own poetry engines
+- bulk insert to make source_text#record_ngrams way faster
+- subcommands `read`, `write`, and `forget` to manage source texts and corporas containing arbitrary source texts
 
 ## Contributing
 

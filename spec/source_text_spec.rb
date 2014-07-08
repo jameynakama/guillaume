@@ -1,27 +1,27 @@
 describe Guillaume::SourceText do
-  let(:file_path) { "spec/data/zone.txt" }
-
   subject do
-    Guillaume::SourceText.new(file_path)
+    source_text = FactoryGirl.create :source_text
+    source_text.record_ngrams
+    source_text
   end
 
   it "should normalize the input file" do
-    expect(subject.normalized).to eq("A la fin tu es las de ce monde ancien")
+    expect(subject.normalized).to eq("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc scelerisque quis nunc a tincidunt. Donec sed nibh ultricies, consequat ante in, fermentum ligula.")
   end
 
   it "should have unigrams" do
-    expect(subject.unigrams).to eq([%w(A), %w(la), %w(fin), %w(tu), %w(es), %w(las), %w(de), %w(ce), %w(monde), %w(ancien)])
+    expect(subject.unigrams.map { |ng| ng.ngram }).to eq(["Lorem", "ipsum", "dolor", "sit", "amet,", "consectetur", "adipiscing", "elit.", "Nunc", "scelerisque", "quis", "nunc", "a", "tincidunt.", "Donec", "sed", "nibh", "ultricies,", "consequat", "ante", "in,", "fermentum", "ligula."])
   end
 
   it "should have bigrams" do
-    expect(subject.bigrams).to eq([%w(A la), %w(la fin), %w(fin tu), %w(tu es), %w(es las), %w(las de), %w(de ce), %w(ce monde), %w(monde ancien)])
+    expect(subject.bigrams.map { |ng| ng.ngram }).to eq(["Lorem||ipsum", "ipsum||dolor", "dolor||sit", "sit||amet,", "amet,||consectetur", "consectetur||adipiscing", "adipiscing||elit.", "Nunc||scelerisque", "scelerisque||quis", "quis||nunc", "nunc||a", "a||tincidunt.", "Donec||sed", "sed||nibh", "nibh||ultricies,", "ultricies,||consequat", "consequat||ante", "ante||in,", "in,||fermentum", "fermentum||ligula."])
   end
 
   it "should have trigrams" do
-    expect(subject.trigrams).to eq([%w(A la fin), %w(la fin tu), %w(fin tu es), %w(tu es las), %w(es las de), %w(las de ce), %w( de ce monde), %w(ce monde ancien)])
+    expect(subject.trigrams.map { |ng| ng.ngram }).to eq(["Lorem||ipsum||dolor", "ipsum||dolor||sit", "dolor||sit||amet,", "sit||amet,||consectetur", "amet,||consectetur||adipiscing", "consectetur||adipiscing||elit.", "Nunc||scelerisque||quis", "scelerisque||quis||nunc", "quis||nunc||a", "nunc||a||tincidunt.", "Donec||sed||nibh", "sed||nibh||ultricies,", "nibh||ultricies,||consequat", "ultricies,||consequat||ante", "consequat||ante||in,", "ante||in,||fermentum", "in,||fermentum||ligula."])
   end
 
   it "should have tetragrams" do
-    expect(subject.tetragrams).to eq([%w(A la fin tu), %w(la fin tu es), %w(fin tu es las), %w(tu es las de), %w(es las de ce), %w(las de ce monde), %w(de ce monde ancien)])
+    expect(subject.tetragrams.map { |ng| ng.ngram }).to eq(["Lorem||ipsum||dolor||sit", "ipsum||dolor||sit||amet,", "dolor||sit||amet,||consectetur", "sit||amet,||consectetur||adipiscing", "amet,||consectetur||adipiscing||elit.", "Nunc||scelerisque||quis||nunc", "scelerisque||quis||nunc||a", "quis||nunc||a||tincidunt.", "Donec||sed||nibh||ultricies,", "sed||nibh||ultricies,||consequat", "nibh||ultricies,||consequat||ante", "ultricies,||consequat||ante||in,", "consequat||ante||in,||fermentum", "ante||in,||fermentum||ligula."])
   end
 end

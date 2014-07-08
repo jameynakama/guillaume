@@ -42,10 +42,16 @@ end
 
 # validations
 
+source_text = Guillaume::SourceText.new
+source_text.file_name = source_text_file
+source_text.title = "tmp"
+source_text.save
+source_text.record_ngrams
 poem = Guillaume::Poem.new(
-  Guillaume::SourceText.new(source_text_file),
+  source_text,
   max_stanzas: options[:max_stanzas],
   seed: options[:seed]
 )
 puts ""
 puts poem.formatted
+source_text.destroy

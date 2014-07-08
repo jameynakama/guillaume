@@ -3,7 +3,7 @@ class Guillaume::Poem
 
   def initialize(corpora, options = { seed: nil, max_stanzas: 10 })
     @corpora = corpora
-    @first_seed = options[:seed].nil? ? random_seed(@corpora.unigrams) : options[:seed]
+    @first_seed = options[:seed].nil? ? random_seed(@corpora.unigrams.as_array) : options[:seed]
     @max_stanzas = options[:max_stanzas]
     @stanzas = 0
     @poem = write
@@ -13,7 +13,7 @@ class Guillaume::Poem
     if @stanzas == 0 && lines.empty?
       @first_seed
     else
-      random_seed @corpora.unigrams
+      random_seed @corpora.unigrams.as_array
     end
   end
 
@@ -42,11 +42,11 @@ class Guillaume::Poem
     else
       # TODO: move this to poetics (and do mid-line rarely)
       ngrams = WeightedRandomizer.new({
-        @corpora.bigrams => 10,
-        @corpora.trigrams => 3,
-        @corpora.tetragrams => 1
+        @corpora.bigrams.as_array => 10,
+        @corpora.trigrams.as_array => 3,
+        @corpora.tetragrams.as_array => 1
       }).sample
-      $LOGGER.debug("  Writing line #{lines_memo.count + 1} with #{ngrams.first.count}-grams...")
+      #$LOGGER.debug("  Writing line #{lines_memo.count + 1} with #{ngrams.first.count}-grams...")
       line = Guillaume::Line.new(get_seed lines_memo).build(ngrams)
       if line.length > 80
         line = Guillaume::Poetics.enjamb line, 40 # 40% chance to break a long line

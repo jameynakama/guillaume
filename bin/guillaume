@@ -36,14 +36,14 @@ command :read do |c|
     raise "Please provide a path to the source text" unless options[:file]
     raise "Please provide one name for the source text" unless args.count == 1
 
-    puts "\nReading #{options[:file]} as '#{args[0]}'..."
+    puts "Reading #{options[:file]} as '#{args[0]}'..."
     source_text = Guillaume::SourceText.new
     source_text.file_name = options[:file]
     source_text.title = args[0]
     source_text.save
     source_text.record_ngrams
 
-    puts "\nRead #{options[:file]} as '#{args[0]}'"
+    puts "Read #{options[:file]} as '#{args[0]}'"
   end
 end
 
@@ -78,18 +78,22 @@ command :forget do |c|
 
   c.action do |global_options, options, args|
     if options[:all]
-      Guillaume::Corpora.destroy_all
-      Guillaume::SourceText.destroy_all
+      Guillaume::Corpora.delete_all
+      Guillaume::SourceText.delete_all
+      Guillaume::Ngram.delete_all
       puts "Removed all corporas and source texts"
     elsif args.count > 0
-      args.each do |title|
-        begin
-          Guillaume::SourceText.find_by(title: title).destroy
-          puts "Forgot source text '#{title}'"
-        rescue NoMethodError
-          puts "There was no source text called '#{title}'"
-        end
-      end
+      raise "Only removing with -a works properly right now..."
+      #args.each do |title|
+        #begin
+          #st = Guillaume::SourceText.find_by(title: title)
+          #st.ngrams.delete_all
+          #st.delete
+          #puts "Forgot source text '#{title}'"
+        #rescue NoMethodError
+          #puts "There was no source text called '#{title}'"
+        #end
+      #end
     else
       raise "Please provide a source text title to forget"
     end

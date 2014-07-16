@@ -25,7 +25,6 @@ class Guillaume::Poem
     if rand(@max_stanzas) < @stanzas
       return lines_memo
     else
-      $LOGGER.info("Writing stanza #{@stanzas + 1}...")
       lines_memo += stanza
       @stanzas += 1
       write(lines_memo)
@@ -46,7 +45,6 @@ class Guillaume::Poem
         @corpora.trigrams.as_array => 3,
         @corpora.tetragrams.as_array => 1
       }).sample
-      #$LOGGER.debug("  Writing line #{lines_memo.count + 1} with #{ngrams.first.count}-grams...")
       line = Guillaume::Line.new(get_seed lines_memo).build(ngrams)
       if line.length > 80
         line = Guillaume::Poetics.enjamb line, 40 # 40% chance to break a long line

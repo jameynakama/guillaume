@@ -1,57 +1,130 @@
 #!/usr/bin/env ruby
+require 'gli'
+require 'guillaume'
 
-require "optparse"
-require "guillaume"
+include GLI::App
 
-options = {}
-option_parser = OptionParser.new do |opts|
-  opts.banner = "Usage: guillaume /path/to/text_source.txt [options]"
+program_desc 'A generative poetry bot'
 
-  opts.on("-v", "--verbose", "Verbose output while writing") do
-    $LOGGER.level = Logger::INFO
-  end
+version Guillaume::VERSION
 
-  opts.on("-d", "--debug", "Debug (extra verbose) output while writing") do
-    $LOGGER.level = Logger::DEBUG
-  end
-
-  options[:seed] = nil
-  opts.on("-s", "--seed SEED", String, "Seed to start poem") do |s|
-    options[:seed] = s
-  end
-
-  options[:max_stanzas] = 10
-  opts.on("-m", "--max-stanzas STANZAS", Integer, "Maximum number of stanzas to write") do |m|
-    options[:max_stanzas] = m
+desc 'Migrate the DB'
+command :init do |c|
+  c.action do |global_options, options, args|
+    gem_dir = File.expand_path("..", File.dirname(__FILE__))
+    $LOAD_PATH.unshift gem_dir
+    require 'rake'
+    require 'pp'
+    pwd = Dir.pwd
+    Dir.chdir(gem_dir)
+    Rake.application.init
+    Rake.application.load_rakefile
+    Dir.chdir(pwd)
+    Rake.application.invoke_task("db:migrate")
+    puts "Database migrated"
   end
 end
 
-option_parser.parse!
+desc 'Read, parse, and store a source text in the DB'
+arg_name 'source_text_title'
+command :read do |c|
+  c.desc "Path to the source text"
+  c.arg_name "/path/to/source/text"
+  c.flag [:f, :file]
 
-source_text_file = ARGV.pop
+  c.action do |global_options, options, args|
+    raise "Please provide a path to the source text" unless options[:file]
+    raise "Please provide one name for the source text" unless args.count == 1
 
-if !source_text_file && options.empty?
-  puts option_parser.help
-  exit
+    puts "\nReading #{options[:file]} as '#{args[0]}'..."
+    source_text = Guillaume::SourceText.new
+    source_text.file_name = options[:file]
+    source_text.title = args[0]
+    source_text.save
+    source_text.record_ngrams
+
+    puts "\nRead #{options[:file]} as '#{args[0]}'"
+  end
 end
 
-# required
-unless source_text_file
-  raise ArgumentError, "Please point to a source text file"
+desc 'Write a poem'
+command :write do |c|
+  c.desc "Maximum number of stanzas to write"
+  c.arg_name "max_stanzas"
+  c.default_value 10
+  c.flag [:m, :max_stanzas]
+
+  c.desc "Seed to start off the poem"
+  c.arg_name "seed"
+  c.default_value nil
+  c.flag [:s, :seed]
+
+  c.action do |global_options, options, args|
+    poem = Guillaume::Poem.new(
+      Guillaume::SourceText.take,
+      max_stanzas: options[:max_stanzas],
+      seed: options[:seed]
+    )
+    puts ""
+    puts poem.formatted
+  end
 end
 
-# validations
+desc 'Forget a particular source text'
+arg_name 'source_text_title'
+command :forget do |c|
+  c.desc "Forget all source texts"
+  c.switch [:a, :all]
 
-source_text = Guillaume::SourceText.new
-source_text.file_name = source_text_file
-source_text.title = "tmp"
-source_text.save
-source_text.record_ngrams
-poem = Guillaume::Poem.new(
-  source_text,
-  max_stanzas: options[:max_stanzas],
-  seed: options[:seed]
-)
-puts ""
-puts poem.formatted
-source_text.destroy
+  c.action do |global_options, options, args|
+    if options[:all]
+      Guillaume::Corpora.destroy_all
+      Guillaume::SourceText.destroy_all
+      puts "Removed all corporas and source texts"
+    elsif args.count > 0
+      args.each do |title|
+        begin
+          Guillaume::SourceText.find_by(title: title).destroy
+          puts "Forgot source text '#{title}'"
+        rescue NoMethodError
+          puts "There was no source text called '#{title}'"
+        end
+      end
+    else
+      raise "Please provide a source text title to forget"
+    end
+  end
+end
+
+desc 'List all known source texts'
+command :list do |c|
+  c.action do |global_options, options, args|
+    source_texts = Guillaume::SourceText.all
+    puts "\nI have read the following source texts:"
+    puts "----------"
+    source_texts.each { |st| puts st.title }
+  end
+end
+
+pre do |global, command, options, args|
+  # Pre logic here
+  # Return true to proceed; false to abort and not call the
+  # chosen command
+  # Use skips_pre before a command to skip this block
+  # on that command only
+  true
+end
+
+post do |global, command, options, args|
+  # Post logic here
+  # Use skips_post before a command to skip this
+  # block on that command only
+end
+
+on_error do |exception|
+  # Error logic here
+  # return false to skip default error handling
+  true
+end
+
+exit run(ARGV)

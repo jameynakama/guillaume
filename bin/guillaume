@@ -83,17 +83,16 @@ command :forget do |c|
       Guillaume::Ngram.delete_all
       puts "Removed all corporas and source texts"
     elsif args.count > 0
-      raise "Only removing with -a works properly right now..."
-      #args.each do |title|
-        #begin
-          #st = Guillaume::SourceText.find_by(title: title)
-          #st.ngrams.delete_all
-          #st.delete
-          #puts "Forgot source text '#{title}'"
-        #rescue NoMethodError
-          #puts "There was no source text called '#{title}'"
-        #end
-      #end
+      args.each do |title|
+        begin
+          st = Guillaume::SourceText.find_by(title: title)
+          Guillaume::Ngram.where(source_text: st).delete_all
+          st.delete
+          puts "Forgot source text '#{title}'"
+        rescue NoMethodError
+          puts "There was no source text called '#{title}'"
+        end
+      end
     else
       raise "Please provide a source text title to forget"
     end

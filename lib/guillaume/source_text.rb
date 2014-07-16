@@ -46,16 +46,18 @@ class Guillaume::SourceText < ActiveRecord::Base
   end
 
   def record_ngrams
+    ngrams = []
     [Guillaume::Unigram, Guillaume::Bigram, Guillaume::Trigram, Guillaume::Tetragram].each_with_index do |clazz, i|
-      get_ngrams(i + 1).each do |tg|
-        ngram = clazz.new
-        ngram.ngram = tg.join(DELIMITER)
-        ngram.key = tg[0...-1].join(DELIMITER)
-        ngram.value = tg[-1]
-        ngram.source_text = self
-        ngram.save
+      get_ngrams(i + 1).each do |ngram|
+        ngrams << clazz.new(
+          :ngram => ngram.join(DELIMITER),
+          :key => ngram[0...-1].join(DELIMITER),
+          :value => ngram[-1],
+          :source_text => self
+        )
       end
     end
+    Guillaume::Ngram.import ngrams, validate: false
   end
 
   private

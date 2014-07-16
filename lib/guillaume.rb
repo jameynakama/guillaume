@@ -1,6 +1,7 @@
 require "net/http"
 require "logger"
 require "active_record"
+require "activerecord-import"
 require "guillaume/version"
 require "guillaume/corpora"
 require "guillaume/source_text"

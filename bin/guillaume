@@ -21,7 +21,7 @@ command :init do |c|
     Rake.application.load_rakefile
     Dir.chdir(pwd)
     Rake.application.invoke_task("db:migrate")
-    puts "Database migrated"
+    puts "\"Database migrated,\" says Guillaume."
   end
 end
 
@@ -36,14 +36,14 @@ command :read do |c|
     raise "Please provide a path to the source text" unless options[:file]
     raise "Please provide one name for the source text" unless args.count == 1
 
-    puts "Reading #{options[:file]} as '#{args[0]}'..."
+    puts "Guillaume finds the file and says, \"Reading '#{options[:file]}' as '#{args[0]}'...\""
     source_text = Guillaume::SourceText.new
     source_text.file_name = options[:file]
     source_text.title = args[0]
     source_text.save
     source_text.record_ngrams
 
-    puts "Read #{options[:file]} as '#{args[0]}'"
+    puts "Guillame says, \"I read #{options[:file]} and stored it as '#{args[0]}'.\""
   end
 end
 
@@ -82,16 +82,16 @@ command :forget do |c|
       Guillaume::Corpora.delete_all
       Guillaume::SourceText.delete_all
       Guillaume::Ngram.delete_all
-      puts "Removed all corporas and source texts"
+      puts "\"I removed all corporas and source texts,\" says Guillaume."
     elsif args.count > 0
       args.each do |title|
         begin
           st = Guillaume::SourceText.find_by(title: title)
           Guillaume::Ngram.where(source_text: st).delete_all
           st.delete
-          puts "Forgot source text '#{title}'"
+          puts "\"I forgot the source text '#{title}',\" says Guillaume."
         rescue NoMethodError
-          puts "There was no source text called '#{title}'"
+          puts "\"There was no source text called '#{title}',\" Guillaume says."
         end
       end
     else
@@ -103,10 +103,10 @@ end
 desc 'List all known source texts'
 command :list do |c|
   c.action do |global_options, options, args|
-    source_texts = Guillaume::SourceText.all
-    puts "\nI have read the following source texts:"
+    source_texts = Guillaume::SourceText.pluck(:title).sort
+    puts "\nGuillaume says, \"I have read the following source texts.\""
     puts "----------"
-    source_texts.each { |st| puts st.title }
+    source_texts.each { |t| puts t }
   end
 end
 

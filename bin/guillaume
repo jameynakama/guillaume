@@ -60,8 +60,9 @@ command :write do |c|
   c.flag [:s, :seed]
 
   c.action do |global_options, options, args|
+    corpora = Guillaume::Corpora.take
     poem = Guillaume::Poem.new(
-      Guillaume::SourceText.take,
+      corpora,
       max_stanzas: options[:max_stanzas],
       seed: options[:seed]
     )

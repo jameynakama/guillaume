@@ -13,19 +13,25 @@ class Guillaume::Line
   end
 
   def next_word(ngrams, options = { look_behind: 1 })
+    look_behind = options[:look_behind]
     search_words = @line_parts[-options[:look_behind]..-1]
-    choose_word(ngram_matches(ngrams, search_words))
+    choose_words(ngram_matches(ngrams, search_words), look_behind)
   end
 
   def ngram_matches(ngrams, search_words)
     ngrams.select { |gram| gram[0..search_words.count-1] == search_words }
   end
 
-  def choose_word(matches)
-    possible_choices(matches).sample
-  end
-
-  def possible_choices(matches)
-    matches.map { |res| res.last }.sort
+  #
+  # Returns the next words as a string from a list of ngram matches
+  # e.g., [%w(know the white whale), %(know the black ship)] matching on
+  #       [%w(know the)] will return either "white whale" or "black ship"
+  # TODO: sort by match frequency, so Poetics can choose to pick a common or
+  #       surprising next string of words
+  #
+  def choose_words(matches, look_behind)
+    matches.map do |match|
+      match[look_behind..-1].join(" ").strip
+    end.sample
   end
 end

@@ -46,8 +46,8 @@ class Guillaume::SourceText < ActiveRecord::Base
   end
 
   def record_ngrams
-    ngrams = []
     [Guillaume::Unigram, Guillaume::Bigram, Guillaume::Trigram, Guillaume::Tetragram].each_with_index do |clazz, i|
+      ngrams = []
       get_ngrams(i + 1).each do |ngram|
         ngrams << clazz.new(
           :ngram => ngram.join(DELIMITER),
@@ -56,8 +56,8 @@ class Guillaume::SourceText < ActiveRecord::Base
           :source_text => self
         )
       end
+      Guillaume::Ngram.import ngrams, validate: false
     end
-    Guillaume::Ngram.import ngrams, validate: false
   end
 
   private

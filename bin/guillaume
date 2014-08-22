@@ -54,13 +54,22 @@ command :write do |c|
   c.default_value 10
   c.flag [:m, :max_stanzas]
 
+  c.desc "Name of corpus to use"
+  c.arg_name "corpus"
+  c.default_value nil
+  c.flag [:c, :corpus]
+
   c.desc "Seed to start off the poem"
   c.arg_name "seed"
   c.default_value nil
   c.flag [:s, :seed]
 
   c.action do |global_options, options, args|
-    corpora = Guillaume::Corpora.take
+    if options[:corpus]
+      corpora = Guillaume::Corpora.find_by_title(options[:corpus])
+    else
+      corpora = Guillaume::Corpora.all.sample
+    end
     poem = Guillaume::Poem.new(
       corpora,
       max_stanzas: options[:max_stanzas],
@@ -107,6 +116,21 @@ command :list do |c|
     puts "\nGuillaume says, \"I have read the following source texts.\""
     puts "----------"
     source_texts.each { |t| puts t }
+  end
+end
+
+desc 'List all known corpora'
+command :corpora do |c|
+  c.action do |global_options, options, args|
+    corpora = Guillaume::Corpora.order(:title)
+    puts "\nGuillaume says, \"I have organized the following corpora.\""
+    puts "----------"
+    corpora.each do |corpus|
+      puts corpus.title
+      corpus.source_texts.pluck(:title).sort.each do |title|
+        puts "  #{title}"
+      end
+    end
   end
 end
 

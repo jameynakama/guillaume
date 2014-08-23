@@ -3,7 +3,7 @@ require "uri"
 DELIMITER = "||"
 
 class Guillaume::SourceText < ActiveRecord::Base
-  has_and_belongs_to_many :corporas
+  has_and_belongs_to_many :corpora
   has_many :ngrams
   attr_accessor :file_name
 

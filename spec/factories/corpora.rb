@@ -1,9 +1,9 @@
 require "securerandom"
 
 FactoryGirl.define do
-  factory :corpora, :class => Guillaume::Corpora do
+  factory :corpus, :class => Guillaume::Corpus do
     sequence :title do |n|
-      "Corpora #{n}"
+      "Corpus #{n}"
     end
   end
 end

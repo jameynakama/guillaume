@@ -66,7 +66,7 @@ command :write do |c|
 
   c.action do |global_options, options, args|
     if options[:corpus]
-      corpus = Guillaume::Corpus.find_by_title(options[:corpus])
+      corpus = Guillaume::Corpus.find_by(title: options[:corpus])
     else
       corpus = Guillaume::Corpus.all.sample
     end
@@ -93,11 +93,12 @@ command :forget do |c|
       Guillaume::Ngram.delete_all
       puts "\"I removed all corpora and source texts,\" says Guillaume."
     elsif args.count > 0
+      # TODO: Make this work
       args.each do |title|
         begin
           st = Guillaume::SourceText.find_by(title: title)
-          Guillaume::Ngram.where(source_text: st).delete_all
-          st.delete
+          #Guillaume::Ngram.where(source_text: st).delete_all
+          st.destroy
           puts "\"I forgot the source text '#{title}',\" says Guillaume."
         rescue NoMethodError
           puts "\"There was no source text called '#{title}',\" Guillaume says."
@@ -119,17 +120,59 @@ command :list do |c|
   end
 end
 
-desc 'List all known corpora'
+desc 'Add, edit, or remove corpora'
+arg_name "source_text_title", :multiple
 command :corpora do |c|
+  c.desc "List all corpora"
+  c.switch [:l, :list]
+
+  c.desc "Name of corpus to create or add to"
+  c.arg_name "corpus"
+  c.default_value nil
+  c.flag [:a, :add]
+
+  c.desc "Name of corpus to remove source text from"
+  c.arg_name "corpus"
+  c.default_value nil
+  c.flag [:r, :remove]
+
+  c.desc "Name of corpus to forget"
+  c.arg_name "corpus"
+  c.default_value nil
+  c.flag [:f, :forget]
+
   c.action do |global_options, options, args|
-    corpora = Guillaume::Corpus.order(:title)
-    puts "\nGuillaume says, \"I have organized the following corpora.\""
-    puts "----------"
-    corpora.each do |corpus|
-      puts corpus.title
-      corpus.source_texts.pluck(:title).sort.each do |title|
-        puts "  #{title}"
+    if options[:list]
+      corpora = Guillaume::Corpus.order(:title)
+      puts "\nGuillaume says, \"I have organized the following corpora.\""
+      puts "----------"
+      corpora.each do |corpus|
+        puts corpus.title
+        corpus.source_texts.pluck(:title).sort.each do |title|
+          puts "  #{title}"
+        end
       end
+    elsif options[:add]
+      raise "\"Please provide the names of source texts to add,\" says Guillaume." unless args.count > 0
+      corpus = Guillaume::Corpus.find_or_create_by(title: options[:add])
+      Guillaume::SourceText.where(title: args).each do |st|
+        corpus.source_texts << st
+        puts "\"I added '#{st.title}' to the '#{corpus.title}' corpus for you,\" says Guillaume."
+      end
+    elsif options[:remove]
+      raise "\"Please provide the names of source texts to remove,\" says Guillaume." unless args.count > 0
+      corpus = Guillaume::Corpus.find_by(title: options[:remove])
+      raise "\"That corpus doesn't exist,\" says Guillaume." unless corpus
+      Guillaume::SourceText.where(title: args).each do |st|
+        corpus.source_texts.delete(st)
+        puts "\"I removed '#{st.title}' from the '#{corpus.title}' corpus for you,\" says Guillaume."
+      end
+    elsif options[:forget]
+      corpus = Guillaume::Corpus.find_by(title: options[:forget])
+      raise "\"That corpus doesn't exist,\" says Guillaume." unless corpus
+      corpus.source_texts.delete_all
+      corpus.delete
+      puts "\"I forgot the '#{corpus.title}' corpus,\" says Guillaume."
     end
   end
 end

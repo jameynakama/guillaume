@@ -43,7 +43,7 @@ command :read do |c|
     source_text.save
     source_text.record_ngrams
 
-    puts "Guillame says, \"I read #{options[:file]} and stored it as '#{args[0]}'.\""
+    puts "Guillaume says, \"I read #{options[:file]} and stored it as '#{args[0]}'.\""
   end
 end
 

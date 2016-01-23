@@ -66,3 +66,4 @@ class Guillaume::SourceText < ActiveRecord::Base
     self.raw_source = File.open(self.file_name, "rb") { |f| f.read }.force_encoding("UTF-8")
   end
 end
+

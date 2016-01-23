@@ -19,3 +19,4 @@ end
 
 class Guillaume::Tetragram < Guillaume::Ngram
 end
+

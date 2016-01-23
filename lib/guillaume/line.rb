@@ -5,7 +5,12 @@ class Guillaume::Line
     @line_parts = seed.split(/ /)
   end
 
-  def build(ngrams)
+  def build(ngrams, corpus)
+    ngrams = WeightedRandomizer.new({
+      corpus.bigrams.as_array => 6,
+      corpus.trigrams.as_array => 3,
+      corpus.tetragrams.as_array => 2
+    }).sample
     begin
       @line_parts << next_word(ngrams)
     end until @line_parts.last.nil?
@@ -15,7 +20,9 @@ class Guillaume::Line
   def next_word(ngrams, options = { look_behind: 1 })
     look_behind = options[:look_behind]
     search_words = @line_parts[-options[:look_behind]..-1]
-    choose_words(ngram_matches(ngrams, search_words), look_behind)
+    next_words = choose_words(ngram_matches(ngrams, search_words), look_behind)
+    puts ". . . #{next_words} . . ."
+    return next_words
   end
 
   def ngram_matches(ngrams, search_words)

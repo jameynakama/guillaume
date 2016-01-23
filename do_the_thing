@@ -1,0 +1,16 @@
+#!/bin/bash
+
+corpora=("Dorian Gray" "Dracula" "Heart of Darkness" "Kama Sutra" "Satyricon" "The Metamorphosis" "The Turn of the Screw" "Ulysses" "Wizard of Oz" "Moby Dick" "Irish Fairy Tales")
+RANDOM=$$$(date +%s)
+
+while [ 1 ]
+  do
+    clear
+    echo "Guillaume begins to write..."
+    echo ""
+    corpus=${corpora[$RANDOM % ${#corpora[@]} ]}
+    ruby -I lib ./bin/guillaume write -c "$corpus" -m 4
+    sleep 30
+    echo ""
+  done
+

@@ -75,8 +75,14 @@ command :write do |c|
       max_stanzas: options[:max_stanzas],
       seed: options[:seed]
     )
+    system "clear"
+    puts "Guillaume writes a new poem based on '#{corpus.title
+    }'"
+    puts ""
+    puts "----------"
     puts ""
     puts poem.formatted
+    puts ""
   end
 end
 

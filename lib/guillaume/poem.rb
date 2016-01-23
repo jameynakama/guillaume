@@ -1,10 +1,10 @@
 class Guillaume::Poem
   attr_accessor :corpus, :poem
 
-  def initialize(corpus, options = { seed: nil, max_stanzas: 10 })
+  def initialize(corpus, options = { seed: nil, max_stanzas: "10" })
     @corpus = corpus
     @first_seed = options[:seed].nil? ? random_seed(@corpus.unigrams.as_array) : options[:seed]
-    @max_stanzas = options[:max_stanzas]
+    @max_stanzas = options[:max_stanzas].to_i
     @stanzas = 0
     @poem = write
   end
@@ -41,11 +41,11 @@ class Guillaume::Poem
     else
       # TODO: move this to poetics (and do mid-line rarely)
       ngrams = WeightedRandomizer.new({
-        @corpus.bigrams.as_array => 10,
+        @corpus.bigrams.as_array => 3,
         @corpus.trigrams.as_array => 3,
-        @corpus.tetragrams.as_array => 1
+        @corpus.tetragrams.as_array => 2
       }).sample
-      line = Guillaume::Line.new(get_seed lines_memo).build(ngrams)
+      line = Guillaume::Line.new(get_seed lines_memo).build(ngrams, @corpus)
       if line.length > 80
         line = Guillaume::Poetics.enjamb line, 40 # 40% chance to break a long line
       end
@@ -58,3 +58,4 @@ class Guillaume::Poem
     @formatted ||= @poem.join("\n")
   end
 end
+

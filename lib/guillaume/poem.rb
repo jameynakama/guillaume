@@ -41,11 +41,11 @@ class Guillaume::Poem
     else
       # TODO: move this to poetics (and do mid-line rarely)
       ngrams = WeightedRandomizer.new({
-        @corpus.bigrams.as_array => 3,
+        @corpus.bigrams.as_array => 10,
         @corpus.trigrams.as_array => 3,
         @corpus.tetragrams.as_array => 2
       }).sample
-      line = Guillaume::Line.new(get_seed lines_memo).build(ngrams, @corpus)
+      line = Guillaume::Line.new(get_seed lines_memo).build(ngrams)
       if line.length > 80
         line = Guillaume::Poetics.enjamb line, 40 # 40% chance to break a long line
       end

@@ -5,12 +5,7 @@ class Guillaume::Line
     @line_parts = seed.split(/ /)
   end
 
-  def build(ngrams, corpus)
-    ngrams = WeightedRandomizer.new({
-      corpus.bigrams.as_array => 6,
-      corpus.trigrams.as_array => 3,
-      corpus.tetragrams.as_array => 2
-    }).sample
+  def build(ngrams)
     begin
       @line_parts << next_word(ngrams)
     end until @line_parts.last.nil?
